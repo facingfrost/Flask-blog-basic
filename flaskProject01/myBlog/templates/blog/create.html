@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}New Post{% endblock %}</h1>
+    <link rel="stylesheet" href="{{ url_for('static', filename='editormd/css/editormd.css') }}">
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <label for="title">Title</label>
+        <input name="title" id="title" value="{{ request.form['title'] }}" required>
+        <label for="body">Body</label>
+        <div id="test-editormd">
+            <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
+        </div>
+        <input type="submit" value="Save">
+    </form>
+    <script src="{{ url_for('static', filename='editormd/examples/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='editormd/editormd.min.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            editormd('test-editormd', {
+                width: "96%",
+                height: 640,
+                syncScrolling: "single",
+                path: "{{ url_for('static', filename='editormd/lib/') }}",
+                // upload images
+                imageUpload: true,
+                imageFormats: [ "jpg", "jpeg", "gif", "png", "bmp", "webp" ],
+                imageUploadURL: "{{ url_for('blog.uploads') }}",
+            });
+        });
+    </script>
+{% endblock %}
